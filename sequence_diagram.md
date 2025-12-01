@@ -95,8 +95,16 @@ sequenceDiagram
 sequenceDiagram
     participant E as Explorer
     participant O as Orchestrator
+    participant newP as New Planet
+    participant currP as Current Planet
 
-    O ->> E: MoveToPlanet(channel_of_new_planet)
+
+    O ->> newP: IncomingExplorerRequest(explorer_id, new_mpsc_sender)
+    newP ->> O: IncomingExplorerResponse(planet_id, Result)
+    O ->> currP: OutgoingExplorerRequest(explorer_id)
+    currP ->> O: OutgoingExplorerRequest(planet_id, move_curr_sender)
+
+    O ->>E: MoveToPlanet(channelof_new_planet)
     E->> O: MovedToPlanetResult(explorer_id, timestamp)
 ```
 
@@ -106,10 +114,19 @@ sequenceDiagram
 sequenceDiagram
     participant E as Explorer
     participant O as Orchestrator
+    participant newP as New Planet
+    participant currP as Current Planet
+
+
 
     E->>O: TravelToPlanet(explorer_id, start_planet_id, dst_planet_id)
-    O ->>E: MoveToPlanet(Option<channelof_new_planet>)
-     E->> O: MovedToPlanetResult(explorer_id, timestamp)
+    O ->> newP: IncomingExplorerRequest(explorer_id, new_mpsc_sender)
+    newP ->> O: IncomingExplorerResponse(planet_id, Result)
+    O ->> currP: OutgoingExplorerRequest(explorer_id)
+    currP ->> O: OutgoingExplorerRequest(planet_id, move_curr_sender)
+
+    O ->>E: MoveToPlanet(channelof_new_planet)
+    E->> O: MovedToPlanetResult(explorer_id, timestamp)
 ```
 ## Bag Content 
 
