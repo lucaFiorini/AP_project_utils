@@ -9,7 +9,7 @@ sequenceDiagram
     participant P as Planet AI
 
     O->>P: StartPlanetAI
-    P->>O: StartPlanetAIResult(planet_id, timestamp)
+    P->>O: StartPlanetAIResult(planet_id)
 ```
 
 ## Planet AI Stop
@@ -20,7 +20,7 @@ sequenceDiagram
     participant P as Planet AI
 
     O->>P: StopPlanetAI
-    P->>O: StopPlanetAIResult(planet_id, timestamp)
+    P->>O: StopPlanetAIResult(planet_id)
 ```
 
 ## Sunray Interaction
@@ -31,7 +31,7 @@ sequenceDiagram
     participant P as Planet AI
 
     O->>P: Sunray(Sunray)
-    P->>O: SunrayAck(planet_id, timestamp)
+    P->>O: SunrayAck(planet_id)
 ```
 
 ## Asteroid Defense Scenario
@@ -42,7 +42,7 @@ sequenceDiagram
     participant P as Planet AI
 
     O->>P: Asteroid(Asteroid)
-    P->>O: AsteroidAck(planet_id, Option<Rocket>, timestamp)
+    P->>O: AsteroidAck(planet_id, destroyed: bool)
 ```
 
 ## Internal State Discovery
@@ -53,7 +53,7 @@ sequenceDiagram
     participant P as Planet
 
     O->>P: InternalStateRequest
-    P->>O: InternalStateResponse(planet_id, PlanetState, timestamp)
+    P->>O: InternalStateResponse(planet_id, DummyPlanetState)
 ```
 
 ## Explorer Initialization
@@ -64,7 +64,7 @@ sequenceDiagram
     participant E as Explorer
 
     O->>E: StartExplorerAi
-    E->>O: StartExplorerAIResult(explorer_id, timestamp)
+    E->>O: StartExplorerAIResult(explorer_id)
 ```
 
 ## Stop Explorer
@@ -75,7 +75,7 @@ sequenceDiagram
     participant E as Explorer
 
     O->>E: StopExplorerAI
-    E->>O: StopExplorerAIResult(explorer_id, timestamp)
+    E->>O: StopExplorerAIResult(explorer_id)
 ```
 
 ## Neighbors discovery
@@ -85,7 +85,7 @@ sequenceDiagram
     participant E as Explorer
     participant O as Orchestrator
 
-    E->>O: NeighborsRequest(explorer_id, current_planet_id, timestamp)
+    E->>O: NeighborsRequest(explorer_id, current_planet_id)
     O->>E: NeighborsResponse(Vec<planet_id>)
 ```
 
@@ -105,7 +105,7 @@ sequenceDiagram
     currP ->> O: OutgoingExplorerRequest(planet_id, Result)
 
     O ->>E: MoveToPlanet(channelof_new_planet)
-    E->> O: MovedToPlanetResult(explorer_id, timestamp)
+    E->> O: MovedToPlanetResult(explorer_id)
 ```
 
 ## Moving to another planet (Explorer Asks)
@@ -125,8 +125,8 @@ sequenceDiagram
     O ->> currP: OutgoingExplorerRequest(explorer_id)
     currP ->> O: OutgoingExplorerRequest(planet_id, Result)
 
-    O ->>E: MoveToPlanet(channelof_new_planet)
-    E->> O: MovedToPlanetResult(explorer_id, timestamp)
+    O ->>E: MoveToPlanet(channel_of_new_planet)
+    E->> O: MovedToPlanetResult(explorer_id)
 ```
 ## Bag Content 
 
@@ -136,7 +136,7 @@ sequenceDiagram
     participant E as Explorer
 
     O->>E: BagContentRequest
-    E->>O: BagContentResponse(explorer_id, Box<dyn Bag>, timestamp)
+    E->>O: BagContentResponse(explorer_id, ExplorerBag)
 ```
 
 ## Basic Resource discovery(manually)
@@ -149,7 +149,7 @@ sequenceDiagram
     O ->> E: SupportedResourceRequest
     E ->> P: SupportedResourceRequest(explorer_id)
     P ->> E: SupportedResourceResponse(resource_list)
-    E ->> O: SupportedResourceResponse(resource_list, explorer_id, timestamp)
+    E ->> O: SupportedResourceResponse(resource_list, explorer_id)
 ```
 ## Combination Rules discovery(manually)
 ```mermaid
@@ -161,7 +161,7 @@ sequenceDiagram
     O ->> E: SupportedCombinationRequest
     E ->> P: SupportedCombinationRequest(explorer_id)
     P ->> E: SupportedCombinationResponse(comb_list)
-    E ->> O: SupportedCombinationResponse(comb_list, explorer_id, timestamp)
+    E ->> O: SupportedCombinationResponse(comb_list, explorer_id)
 ```
 ## Basic Resource Generation(manually)
 ```mermaid
@@ -185,8 +185,8 @@ sequenceDiagram
 
     O ->> E: CombineResourceRequest(CombineResourceRequest)
     E ->> P: CombineResourceRequest(CombineResourceRequest, explorer_id)
-    P ->> E: CombineResourceResponse(Option<ComplexResource>)
-    E ->> O: CombineResourceResponse(Option<ComplexResource>, explorer_id)
+    P ->> E: CombineResourceResponse(Result<ComplexResource, (String, Resource1, Resource2)>)
+    E ->> O: CombineResourceResponse(Result, explorer_id)
 ```
 
 ## Basic Resource discovery (from Explorer)
@@ -229,7 +229,7 @@ sequenceDiagram
     participant P as Planet AI
 
     E ->> P: CombineResourceRequest(CombineResourceRequest, explorer_id)
-    P ->> E: CombineResourceResponse(Option<ComplexResource>)
+    P ->> E: CombineResourceResponse(Result<ComplexResource, (String, Resource1, Resource2)>)
 
 ```
 
