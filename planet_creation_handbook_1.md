@@ -1,4 +1,4 @@
-# Planet construction handbook 1
+# Planet creation handbook 1
 
 This is an addendum of the official documentation aimed at aiding groups when implementing a planet.
 This is written for common crate's version 1.0
