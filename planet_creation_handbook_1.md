@@ -23,10 +23,19 @@ pub fn create_planet(
 	rx_orchestrator: crossbeam::Receiver<messages::OrchestratorToPlanet>,
 	tx_orchestrator: crossbeam::Sender<messages::PlanetToOrchestrator>,
 	rx_explorer: crossbeam::Receiver<messages::ExplorerToPlanet>,
+	planet_id: u32
 ) -> Planet {
 	//Your code...
 }
 ```
+
+>[!note]
+>In the example provided by the source file, `planet_id` is not included in create_planet.
+>This is a mistake, as it's needed for the agreed-to id managment, where each group would manually assign an id to each planet.
+
+>[!warning]
+>The entirety of create_planet may be changed and added to a trait, as to provide a more standardised construction method.
+>See [Issue 100](https://github.com/unitn-ap-2025/common/issues/100)
 
 >[!note]
 >`Planet::new()`, as of 1.0, returns a Result
